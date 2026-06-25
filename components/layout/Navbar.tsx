@@ -5,6 +5,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Download } from "lucide-react";
 import { navLinks, profile } from "@/lib/content";
 
+const menuEase = [0.22, 1, 0.36, 1] as const;
+
+function lockBodyScroll() {
+  const scrollbarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+  const prevOverflow = document.body.style.overflow;
+  const prevPaddingRight = document.body.style.paddingRight;
+
+  document.body.style.overflow = "hidden";
+  if (scrollbarWidth > 0) {
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+  }
+
+  return () => {
+    document.body.style.overflow = prevOverflow;
+    document.body.style.paddingRight = prevPaddingRight;
+  };
+}
+
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -17,13 +36,11 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    if (!open) return;
+    return lockBodyScroll();
   }, [open]);
 
-  const showBar = scrolled || open;
+  const showBar = scrolled;
 
   return (
     <>
@@ -87,27 +104,32 @@ export function Navbar() {
 
       <AnimatePresence>
         {open && (
-          <>
-            <motion.button
+          <motion.div
+            key="mobile-menu"
+            className="fixed inset-0 z-40 lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: menuEase }}
+          >
+            <button
               type="button"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-background/70 backdrop-blur-sm lg:hidden"
+              className="absolute inset-0 bg-background/88"
               aria-label="Close menu"
               onClick={() => setOpen(false)}
             />
-            <motion.div
-              initial={{ opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.2 }}
-              className="glass-card fixed inset-x-4 z-50 max-h-[min(70dvh,520px)] overflow-y-auto rounded-2xl border border-card-border p-5 shadow-[0_16px_48px_rgba(0,0,0,0.45)] sm:inset-x-6 lg:hidden"
+            <motion.nav
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.32, ease: menuEase }}
+              className="glass-card absolute inset-x-4 max-h-[min(70dvh,520px)] overflow-y-auto rounded-2xl border border-card-border p-5 shadow-[0_16px_48px_rgba(0,0,0,0.45)] sm:inset-x-6"
               style={{
                 top: "calc(3.75rem + env(safe-area-inset-top))",
+                transformOrigin: "top center",
               }}
             >
-              <nav className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
@@ -127,9 +149,9 @@ export function Navbar() {
                   <Download size={16} />
                   Download Resume
                 </a>
-              </nav>
-            </motion.div>
-          </>
+              </div>
+            </motion.nav>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

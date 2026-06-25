@@ -16,40 +16,38 @@ const CHAR_MS = 42;
 const LINE_PAUSE_MS = 380;
 const END_PAUSE_MS = 500;
 
+function shouldPlayIntro() {
+  const reduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const seen = sessionStorage.getItem("portfolio-intro-seen");
+  return !reduced && !seen;
+}
+
 export function PageLoader({ children }: { children: ReactNode }) {
-  const [active, setActive] = useState(true);
+  const [introActive, setIntroActive] = useState(false);
   const [lineIndex, setLineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
-  const [ready, setReady] = useState(false);
 
   const currentLine = LOADER_LINES[lineIndex] ?? "";
   const displayed = currentLine.slice(0, charIndex);
 
   useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const seen = sessionStorage.getItem("portfolio-intro-seen");
+    if (!shouldPlayIntro()) return;
 
-    if (reduced || seen) {
-      setActive(false);
-      setReady(true);
-      return;
-    }
+    const frame = requestAnimationFrame(() => {
+      setIntroActive(true);
+      document.body.style.overflow = "hidden";
+    });
 
-    document.body.style.overflow = "hidden";
     return () => {
+      cancelAnimationFrame(frame);
       document.body.style.overflow = "";
     };
   }, []);
 
   useEffect(() => {
-    if (!active) return;
-
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (reduced) return;
+    if (!introActive) return;
 
     if (charIndex < currentLine.length) {
       const t = window.setTimeout(() => setCharIndex((c) => c + 1), CHAR_MS);
@@ -66,23 +64,17 @@ export function PageLoader({ children }: { children: ReactNode }) {
 
     const t = window.setTimeout(() => {
       sessionStorage.setItem("portfolio-intro-seen", "1");
-      setActive(false);
-      window.setTimeout(() => setReady(true), 550);
+      setIntroActive(false);
+      document.body.style.overflow = "";
     }, END_PAUSE_MS);
 
     return () => clearTimeout(t);
-  }, [active, charIndex, currentLine.length, lineIndex]);
-
-  useEffect(() => {
-    if (!active) {
-      document.body.style.overflow = "";
-    }
-  }, [active]);
+  }, [introActive, charIndex, currentLine.length, lineIndex]);
 
   return (
     <>
       <AnimatePresence>
-        {active && (
+        {introActive && (
           <motion.div
             key="intro-loader"
             className="fixed inset-0 z-[200] flex items-center justify-center bg-background px-6"
@@ -105,16 +97,7 @@ export function PageLoader({ children }: { children: ReactNode }) {
         )}
       </AnimatePresence>
 
-      <div
-        className={
-          ready
-            ? "opacity-100"
-            : "pointer-events-none fixed inset-0 opacity-0"
-        }
-        aria-hidden={!ready}
-      >
-        {children}
-      </div>
+      {children}
     </>
   );
 }
