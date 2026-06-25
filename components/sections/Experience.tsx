@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { experience } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { useRevealMotion } from "@/hooks/useRevealMotion";
 
 const PREVIEW_COUNT = 5;
 
@@ -21,13 +22,19 @@ function ExperienceCard({
     ? job.highlights
     : job.highlights.slice(0, PREVIEW_COUNT);
 
+  const reveal = useRevealMotion(
+    { opacity: 0, x: -24 },
+    { opacity: 1, x: 0 },
+    {
+      transition: { duration: 0.5, delay: index * 0.1 },
+      viewport: { once: true, margin: "-40px" },
+    },
+  );
+
   return (
     <motion.article
-      initial={{ opacity: 0, x: -24 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
       className="grid items-start gap-4 md:grid-cols-[3.5rem_1px_1fr] md:gap-x-6"
+      {...reveal}
     >
       <span className="font-display hidden pt-2 text-right text-3xl font-bold text-accent-cyan/30 md:block lg:text-4xl">
         {job.id}

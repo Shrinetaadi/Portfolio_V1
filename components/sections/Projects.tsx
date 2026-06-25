@@ -7,6 +7,50 @@ import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { projects } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TechLogo } from "@/components/ui/TechLogo";
+import { useRevealMotion } from "@/hooks/useRevealMotion";
+
+function HighlightItem({
+  point,
+  delay,
+}: {
+  point: string;
+  delay: number;
+}) {
+  const reveal = useRevealMotion(
+    { opacity: 0, x: -8 },
+    { opacity: 1, x: 0 },
+    { transition: { delay }, viewport: { once: true } },
+  );
+
+  return (
+    <motion.li
+      className="flex gap-2.5 text-sm text-muted before:mt-2 before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-accent-cyan"
+      {...reveal}
+    >
+      {point}
+    </motion.li>
+  );
+}
+
+function TechTagReveal({
+  name,
+  delay,
+}: {
+  name: string;
+  delay: number;
+}) {
+  const reveal = useRevealMotion(
+    { opacity: 0, scale: 0.9 },
+    { opacity: 1, scale: 1 },
+    { transition: { delay }, viewport: { once: true } },
+  );
+
+  return (
+    <motion.div {...reveal}>
+      <TechLogo name={name} size={18} />
+    </motion.div>
+  );
+}
 
 function ProjectCard({
   project,
@@ -19,13 +63,41 @@ function ProjectCard({
   const isEven = index % 2 === 0;
   const isFeatured = "featured" in project && project.featured === true;
 
+  const cardReveal = useRevealMotion(
+    { opacity: 0, y: 48 },
+    { opacity: 1, y: 0 },
+    {
+      transition: {
+        duration: 0.65,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      },
+      viewport: { once: true, margin: "-60px" },
+    },
+  );
+
+  const idReveal = useRevealMotion(
+    { opacity: 0, x: -12 },
+    { opacity: 1, x: 0 },
+    {
+      transition: { delay: 0.2 + index * 0.08 },
+      viewport: { once: true },
+    },
+  );
+
+  const lineReveal = useRevealMotion(
+    { width: 0 },
+    { width: "3rem" },
+    {
+      transition: { duration: 0.5, delay: 0.15 + index * 0.08 },
+      viewport: { once: true },
+    },
+  );
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 48 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.65, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
       className={`group relative ${isFeatured ? "lg:col-span-2" : ""}`}
+      {...cardReveal}
     >
       <div
         className={`glow-border glass-card overflow-hidden rounded-2xl transition-all duration-500 ${
@@ -58,11 +130,8 @@ function ProjectCard({
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent md:bg-gradient-to-r md:from-transparent md:via-background/30 md:to-background/80" />
 
             <motion.span
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 + index * 0.08 }}
               className="absolute top-4 left-4 font-display text-6xl font-bold text-accent-cyan/15 sm:text-7xl"
+              {...idReveal}
             >
               {project.id}
             </motion.span>
@@ -82,11 +151,8 @@ function ProjectCard({
           <div className="absolute top-0 right-0 h-24 w-24 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.12),transparent_70%)]" />
 
           <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: "3rem" }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 + index * 0.08 }}
             className="mb-4 h-0.5 rounded-full bg-gradient-to-r from-accent-cyan to-accent-violet"
+            {...lineReveal}
           />
 
           <h3 className="font-display text-xl font-bold sm:text-2xl lg:text-3xl">
@@ -109,16 +175,11 @@ function ProjectCard({
             <div className="mt-5">
               <ul className="space-y-2">
                 {project.highlights.slice(0, 3).map((point, i) => (
-                  <motion.li
+                  <HighlightItem
                     key={point}
-                    initial={{ opacity: 0, x: -8 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.25 + i * 0.06 }}
-                    className="flex gap-2.5 text-sm text-muted before:mt-2 before:h-1.5 before:w-1.5 before:shrink-0 before:rounded-full before:bg-accent-cyan"
-                  >
-                    {point}
-                  </motion.li>
+                    point={point}
+                    delay={0.25 + i * 0.06}
+                  />
                 ))}
               </ul>
 
@@ -165,15 +226,7 @@ function ProjectCard({
 
           <div className="mt-5 flex flex-wrap gap-1.5 sm:gap-2">
             {project.tech.map((t, i) => (
-              <motion.div
-                key={t}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 + i * 0.04 }}
-              >
-                <TechLogo name={t} size={18} />
-              </motion.div>
+              <TechTagReveal key={t} name={t} delay={0.3 + i * 0.04} />
             ))}
           </div>
         </div>
@@ -187,6 +240,12 @@ function ProjectCard({
 }
 
 export function Projects() {
+  const githubLinkReveal = useRevealMotion(
+    { opacity: 0 },
+    { opacity: 1 },
+    { viewport: { once: true } },
+  );
+
   return (
     <section id="projects" className="section-padding bg-card/30">
       <div className="container-main">
@@ -198,10 +257,8 @@ export function Projects() {
 
         <motion.a
           href="#github"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
           className="mt-6 inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent-cyan"
+          {...githubLinkReveal}
         >
           See open-source repos below
           <ArrowUpRight size={14} />

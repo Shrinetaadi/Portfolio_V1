@@ -1,4 +1,5 @@
 import { PageLoader } from "@/components/layout/PageLoader";
+import { RevealMotionProvider } from "@/hooks/useRevealMotion";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
@@ -18,6 +19,7 @@ import { Contact } from "@/components/sections/Contact";
 export default function Home() {
   return (
     <PageLoader>
+      <RevealMotionProvider>
       <ScrollProgress />
       <Navbar />
       <main>
@@ -35,6 +37,7 @@ export default function Home() {
       <Footer />
       <ScrollToTop />
       <WhatsAppFloat />
+      </RevealMotionProvider>
     </PageLoader>
   );
 }

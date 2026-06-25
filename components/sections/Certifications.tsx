@@ -4,6 +4,51 @@ import { motion } from "framer-motion";
 import { ExternalLink, Award } from "lucide-react";
 import { certifications } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { useRevealMotion } from "@/hooks/useRevealMotion";
+
+function CertificationCard({
+  cert,
+  index,
+}: {
+  cert: (typeof certifications)[number];
+  index: number;
+}) {
+  const reveal = useRevealMotion(
+    { opacity: 0, scale: 0.95 },
+    { opacity: 1, scale: 1 },
+    {
+      transition: { duration: 0.4, delay: index * 0.06 },
+      viewport: { once: true },
+    },
+  );
+
+  return (
+    <motion.a
+      href={cert.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ y: -4 }}
+      className="glow-border glass-card group flex items-start gap-4 rounded-2xl p-6 transition-colors"
+      {...reveal}
+    >
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-cyan/10 text-accent-cyan">
+        <Award size={20} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <h3 className="font-display font-semibold group-hover:text-accent-cyan">
+          {cert.title}
+        </h3>
+        <p className="mt-1 text-sm text-muted">
+          {cert.issuer} · {cert.date}
+        </p>
+      </div>
+      <ExternalLink
+        size={16}
+        className="shrink-0 text-muted transition-colors group-hover:text-accent-cyan"
+      />
+    </motion.a>
+  );
+}
 
 export function Certifications() {
   return (
@@ -12,34 +57,7 @@ export function Certifications() {
         <SectionHeading label="Certifications" title="Credentials" />
         <div className="mt-10 grid gap-3 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3">
           {certifications.map((cert, index) => (
-            <motion.a
-              key={cert.title}
-              href={cert.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.06 }}
-              whileHover={{ y: -4 }}
-              className="glow-border glass-card group flex items-start gap-4 rounded-2xl p-6 transition-colors"
-            >
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-cyan/10 text-accent-cyan">
-                <Award size={20} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-display font-semibold group-hover:text-accent-cyan">
-                  {cert.title}
-                </h3>
-                <p className="mt-1 text-sm text-muted">
-                  {cert.issuer} · {cert.date}
-                </p>
-              </div>
-              <ExternalLink
-                size={16}
-                className="shrink-0 text-muted transition-colors group-hover:text-accent-cyan"
-              />
-            </motion.a>
+            <CertificationCard key={cert.title} cert={cert} index={index} />
           ))}
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Star } from "lucide-react";
 import type { GitHubRepo } from "@/lib/github";
+import { useRevealMotion } from "@/hooks/useRevealMotion";
 
 type GitHubRepoCardProps = {
   repo: GitHubRepo;
@@ -19,17 +20,23 @@ export function GitHubRepoCard({
     ? (languageColors[repo.language] ?? "#a1a1aa")
     : null;
 
+  const reveal = useRevealMotion(
+    { opacity: 0, y: 24 },
+    { opacity: 1, y: 0 },
+    {
+      transition: { duration: 0.45, delay: index * 0.06 },
+      viewport: { once: true, margin: "-40px" },
+    },
+  );
+
   return (
     <motion.a
       href={repo.url}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay: index * 0.06 }}
       whileHover={{ y: -4 }}
       className="group glow-border glass-card flex h-full flex-col rounded-2xl p-5 transition-shadow sm:p-6"
+      {...reveal}
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="font-display truncate text-base font-semibold text-foreground group-hover:text-accent-cyan sm:text-lg">
