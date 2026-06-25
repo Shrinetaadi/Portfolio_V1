@@ -1,0 +1,72 @@
+/** Simple Icons — https://simpleicons.org */
+export const techLogoMap: Record<string, { slug: string; color?: string }> = {
+  "Android Development": { slug: "android", color: "3DDC84" },
+  Android: { slug: "android", color: "3DDC84" },
+  Kotlin: { slug: "kotlin", color: "7F52FF" },
+  Java: { slug: "openjdk", color: "437291" },
+  "Android TV": { slug: "android", color: "3DDC84" },
+  "Android SDK": { slug: "android", color: "3DDC84" },
+  MVVM: { slug: "kotlin", color: "7F52FF" },
+  "Mobile Application Development": { slug: "android", color: "3DDC84" },
+  "Mobile Development": { slug: "android", color: "3DDC84" },
+  "React.js": { slug: "react", color: "61DAFB" },
+  React: { slug: "react", color: "61DAFB" },
+  "Next.js": { slug: "nextdotjs", color: "FFFFFF" },
+  "Node.js": { slug: "nodedotjs", color: "339933" },
+  JavaScript: { slug: "javascript", color: "F7DF1E" },
+  HTML: { slug: "html5", color: "E34F26" },
+  "Tailwind CSS": { slug: "tailwindcss", color: "06B6D4" },
+  WebSocket: { slug: "socketdotio", color: "FFFFFF" },
+  IPTV: { slug: "vlcmediaplayer", color: "FF8800" },
+  "Video Streaming": { slug: "ffmpeg", color: "007808" },
+  "HLS Streaming": { slug: "ffmpeg", color: "007808" },
+  "UDP Multicast": { slug: "wireshark", color: "1679A7" },
+  "EPG Integration": { slug: "mongodb", color: "47A248" },
+  "Channel Management": { slug: "redis", color: "FF4438" },
+  "REST APIs": { slug: "fastapi", color: "009688" },
+  PostgreSQL: { slug: "postgresql", color: "4169E1" },
+  MySQL: { slug: "mysql", color: "4479A1" },
+  Supabase: { slug: "supabase", color: "3FCF8E" },
+  "Database Design": { slug: "prisma", color: "2D3748" },
+  Retrofit: { slug: "android", color: "3DDC84" },
+  Room: { slug: "sqlite", color: "003B57" },
+  Linux: { slug: "linux", color: "FCC624" },
+  Networking: { slug: "nginx", color: "009639" },
+  "System Integration": { slug: "docker", color: "2496ED" },
+  Git: { slug: "git", color: "F05032" },
+  GitHub: { slug: "github", color: "FFFFFF" },
+  Postman: { slug: "postman", color: "FF6C37" },
+  "Android Studio": { slug: "android", color: "3DDC84" },
+  "Product Development": { slug: "notion", color: "FFFFFF" },
+  Debugging: { slug: "sentry", color: "362D59" },
+  Troubleshooting: { slug: "datadog", color: "632CA6" },
+  "QA Testing": { slug: "jest", color: "C21325" },
+  TypeScript: { slug: "typescript", color: "3178C6" },
+  Docker: { slug: "docker", color: "2496ED" },
+  "AI-Assisted Development": { slug: "openai", color: "412991" },
+};
+
+export function getTechLogoUrl(name: string): string | null {
+  const entry = techLogoMap[name];
+  if (!entry) return null;
+  const color = entry.color ?? "FFFFFF";
+  return `https://cdn.simpleicons.org/${entry.slug}/${color}`;
+}
+
+export const featuredTechs = [
+  { name: "Kotlin", slug: "kotlin", color: "7F52FF" },
+  { name: "Java", slug: "openjdk", color: "437291" },
+  { name: "Android", slug: "android", color: "3DDC84" },
+  { name: "React", slug: "react", color: "61DAFB" },
+  { name: "Next.js", slug: "nextdotjs", color: "FFFFFF" },
+  { name: "Node.js", slug: "nodedotjs", color: "339933" },
+  { name: "PostgreSQL", slug: "postgresql", color: "4169E1" },
+  { name: "MySQL", slug: "mysql", color: "4479A1" },
+  { name: "Linux", slug: "linux", color: "FCC624" },
+  { name: "Git", slug: "git", color: "F05032" },
+  { name: "Docker", slug: "docker", color: "2496ED" },
+  { name: "Supabase", slug: "supabase", color: "3FCF8E" },
+  { name: "Tailwind", slug: "tailwindcss", color: "06B6D4" },
+  { name: "TypeScript", slug: "typescript", color: "3178C6" },
+  { name: "VLC", slug: "vlcmediaplayer", color: "FF8800" },
+];

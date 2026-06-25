@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aditya Singh Shrinet — Portfolio
+
+Dark, animated portfolio site for [shrinetaadi.in](https://shrinetaadi.in).
+
+## Stack
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS v4
+- Framer Motion + GSAP + Lenis
+- React Three Fiber (hero background)
+- Resend (contact form email)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+cd portfolio
+npm install
+cp .env.local.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description |
+|----------|-------------|
+| `RESEND_API_KEY` | API key from [resend.com](https://resend.com) |
+| `CONTACT_EMAIL` | Inbox for form submissions (`shrinetaadi@gmail.com`) |
+| `RESEND_FROM_EMAIL` | Verified sender address |
 
-## Learn More
+## Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Push this repo to GitHub
+2. Import the project in [Vercel](https://vercel.com)
+3. Add the environment variables above
+4. Add custom domains: `shrinetaadi.in` and `www.shrinetaadi.in`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Hostinger DNS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For domain `shrinetaadi.in` (currently on Hostinger):
 
-## Deploy on Vercel
+| Type | Name | Value |
+|------|------|-------|
+| A | `@` | `76.76.21.21` |
+| CNAME | `www` | `cname.vercel-dns.com` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Remove the Hostinger parking page after Vercel verifies the domain.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Resend Setup
+
+1. Create a Resend account and generate an API key
+2. For production, verify `shrinetaadi.in` and add the DNS records Resend provides
+3. Set `RESEND_FROM_EMAIL` to your verified address (e.g. `Portfolio <hello@shrinetaadi.in>`)
+4. Until verified, use `onboarding@resend.dev` for testing (delivers only to your Resend account email)
+
+## Content
+
+All portfolio content lives in `lib/content.ts`, sourced from `Resume.pdf` and LinkedIn certifications. Update that file to change copy, projects, or skills.
+
+Resume PDF is served from `public/resume.pdf`.
