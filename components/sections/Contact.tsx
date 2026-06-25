@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import {
   Send,
   Loader2,
@@ -16,7 +15,6 @@ import { toast } from "sonner";
 import { profile } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { useRevealMotion } from "@/hooks/useRevealMotion";
 
 function GitHubIcon({ size = 18 }: { size?: number }) {
   return (
@@ -70,66 +68,9 @@ const contactLinks = [
   },
 ];
 
-function ContactLinkItem({
-  item,
-  index,
-}: {
-  item: (typeof contactLinks)[number];
-  index: number;
-}) {
-  const reveal = useRevealMotion(
-    { opacity: 0, y: 12 },
-    { opacity: 1, y: 0 },
-    { transition: { delay: index * 0.05 }, viewport: { once: true } },
-  );
-
-  return (
-    <motion.a
-      href={item.href}
-      target={item.external ? "_blank" : undefined}
-      rel={item.external ? "noopener noreferrer" : undefined}
-      className="glow-border glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-accent-cyan/30"
-      {...reveal}
-    >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-cyan/10 text-accent-cyan">
-        <item.icon size={18} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[10px] tracking-widest text-muted uppercase">
-          {item.label}
-        </p>
-        <p className="truncate text-sm font-medium group-hover:text-accent-cyan">
-          {item.value}
-        </p>
-      </div>
-      {item.external && (
-        <ExternalLink
-          size={14}
-          className="shrink-0 text-muted opacity-0 transition-opacity group-hover:opacity-100"
-        />
-      )}
-    </motion.a>
-  );
-}
-
 export function Contact() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-
-  const sidebarReveal = useRevealMotion(
-    { opacity: 0, x: -24 },
-    { opacity: 1, x: 0 },
-    { transition: { duration: 0.55 }, viewport: { once: true } },
-  );
-
-  const formReveal = useRevealMotion(
-    { opacity: 0, x: 24 },
-    { opacity: 1, x: 0 },
-    {
-      transition: { duration: 0.55, delay: 0.1 },
-      viewport: { once: true },
-    },
-  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -166,10 +107,7 @@ export function Contact() {
     <section id="contact" className="section-padding">
       <div className="container-main">
         <div className="grid items-start gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-          <motion.div
-            className="lg:sticky lg:top-28"
-            {...sidebarReveal}
-          >
+          <div className="lg:sticky lg:top-28">
             <SectionHeading
               label="Contact"
               title="Let's Work Together"
@@ -177,8 +115,32 @@ export function Contact() {
             />
 
             <div className="mt-8 space-y-3 sm:mt-10">
-              {contactLinks.map((item, index) => (
-                <ContactLinkItem key={item.label} item={item} index={index} />
+              {contactLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
+                  className="glow-border glass-card group flex items-center gap-4 rounded-xl p-4 transition-colors hover:border-accent-cyan/30"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-cyan/10 text-accent-cyan">
+                    <item.icon size={18} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[10px] tracking-widest text-muted uppercase">
+                      {item.label}
+                    </p>
+                    <p className="truncate text-sm font-medium group-hover:text-accent-cyan">
+                      {item.value}
+                    </p>
+                  </div>
+                  {item.external && (
+                    <ExternalLink
+                      size={14}
+                      className="shrink-0 text-muted opacity-0 transition-opacity group-hover:opacity-100"
+                    />
+                  )}
+                </a>
               ))}
 
               <div className="glow-border glass-card flex items-center gap-4 rounded-xl p-4">
@@ -202,12 +164,11 @@ export function Contact() {
               <Download size={16} />
               Download resume
             </a>
-          </motion.div>
+          </div>
 
-          <motion.form
+          <form
             onSubmit={handleSubmit}
             className="glow-border glass-card rounded-2xl p-5 sm:p-8"
-            {...formReveal}
           >
             <h3 className="font-display text-lg font-semibold sm:text-xl">
               Send a message
@@ -290,7 +251,7 @@ export function Contact() {
                 )}
               </Button>
             </div>
-          </motion.form>
+          </form>
         </div>
       </div>
     </section>

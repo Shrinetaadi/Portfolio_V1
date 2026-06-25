@@ -1,20 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { experience } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { useRevealMotion } from "@/hooks/useRevealMotion";
 
 const PREVIEW_COUNT = 5;
 
 function ExperienceCard({
   job,
-  index,
 }: {
   job: (typeof experience)[number];
-  index: number;
 }) {
   const [expanded, setExpanded] = useState(false);
   const hasMore = job.highlights.length > PREVIEW_COUNT;
@@ -22,28 +18,13 @@ function ExperienceCard({
     ? job.highlights
     : job.highlights.slice(0, PREVIEW_COUNT);
 
-  const reveal = useRevealMotion(
-    { opacity: 0, x: -24 },
-    { opacity: 1, x: 0 },
-    {
-      transition: { duration: 0.5, delay: index * 0.1 },
-      viewport: { once: true, margin: "-40px" },
-    },
-  );
-
   return (
-    <motion.article
-      className="grid items-start gap-4 md:grid-cols-[3.5rem_1px_1fr] md:gap-x-6"
-      {...reveal}
-    >
+    <article className="grid items-start gap-4 md:grid-cols-[3.5rem_1px_1fr] md:gap-x-6">
       <span className="font-display hidden pt-2 text-right text-3xl font-bold text-accent-cyan/30 md:block lg:text-4xl">
         {job.id}
       </span>
 
-      <div
-        className="relative hidden md:block"
-        aria-hidden
-      >
+      <div className="relative hidden md:block" aria-hidden>
         <div className="absolute top-3 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-accent-cyan bg-background" />
         <div className="mx-auto h-full min-h-[calc(100%-0.75rem)] w-px bg-gradient-to-b from-accent-cyan/50 via-accent-violet/30 to-transparent" />
       </div>
@@ -119,7 +100,7 @@ function ExperienceCard({
           </div>
         )}
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -133,8 +114,8 @@ export function Experience() {
           subtitle="Three roles — Android, IPTV & hospitality software"
         />
         <div className="mt-10 space-y-6 sm:mt-14 sm:space-y-8">
-          {experience.map((job, index) => (
-            <ExperienceCard key={`${job.company}-${job.role}`} job={job} index={index} />
+          {experience.map((job) => (
+            <ExperienceCard key={`${job.company}-${job.role}`} job={job} />
           ))}
         </div>
       </div>

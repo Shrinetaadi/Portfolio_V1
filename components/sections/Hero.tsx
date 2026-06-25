@@ -7,23 +7,6 @@ import { profile } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
 import { HeroScene } from "@/components/three/HeroSceneLoader";
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.25 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 32 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
 export function Hero() {
   return (
     <section className="relative flex min-h-[100dvh] items-center overflow-hidden section-padding pt-[calc(4.75rem+env(safe-area-inset-top))] sm:pt-24">
@@ -31,7 +14,6 @@ export function Hero() {
         <HeroScene />
       </div>
 
-      {/* Blended developer photo — full-height, right-weighted (restored style) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <Image
           src={profile.heroImage}
@@ -49,38 +31,21 @@ export function Hero() {
       </div>
 
       <div className="container-main relative z-10">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="max-w-xl lg:max-w-2xl"
-        >
-          <motion.p
-            variants={item}
-            className="mb-3 text-xs tracking-[0.2em] text-accent-cyan uppercase sm:text-sm"
-          >
+        <div className="max-w-xl lg:max-w-2xl">
+          <p className="mb-3 text-xs tracking-[0.2em] text-accent-cyan uppercase sm:text-sm">
             Hi, I&apos;m
-          </motion.p>
-          <motion.h1
-            variants={item}
-            className="font-display text-[2rem] leading-[1.1] font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
-          >
+          </p>
+          <h1 className="font-display text-[2rem] leading-[1.1] font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             {profile.shortName}
             <br />
             <span className="gradient-text">Singh Shrinet</span>
-          </motion.h1>
-          <motion.p
-            variants={item}
-            className="mt-4 text-base text-muted sm:mt-6 sm:text-xl md:text-2xl"
-          >
+          </h1>
+          <p className="mt-4 text-base text-muted sm:mt-6 sm:text-xl md:text-2xl">
             {profile.title}
             <span className="text-foreground/30"> · </span>
             <span className="block sm:inline">{profile.subtitle}</span>
-          </motion.p>
-          <motion.div
-            variants={item}
-            className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:flex-wrap"
-          >
+          </p>
+          <div className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:w-auto sm:flex-row sm:flex-wrap">
             <a href="#projects" className="w-full sm:w-auto">
               <Button className="w-full sm:w-auto">View Work</Button>
             </a>
@@ -96,15 +61,12 @@ export function Hero() {
                 Contact
               </Button>
             </a>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
 
-      <motion.a
+      <a
         href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.3 }}
         className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-1 text-muted sm:flex"
       >
         <span className="text-[10px] tracking-widest uppercase">Scroll</span>
@@ -114,7 +76,7 @@ export function Hero() {
         >
           <ArrowDown size={18} />
         </motion.div>
-      </motion.a>
+      </a>
     </section>
   );
 }

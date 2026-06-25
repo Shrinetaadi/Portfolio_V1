@@ -7,7 +7,6 @@ import { featuredTechs } from "@/lib/tech-logos";
 import { skills as skillGroups } from "@/lib/content";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TechLogo } from "@/components/ui/TechLogo";
-import { useRevealMotion } from "@/hooks/useRevealMotion";
 
 function LogoTile({ slug, color, name }: { slug: string; color: string; name: string }) {
   const [failed, setFailed] = useState(false);
@@ -67,39 +66,6 @@ function LogoCloud() {
   );
 }
 
-function SkillGroupCard({
-  group,
-  index,
-}: {
-  group: (typeof skillGroups)[number];
-  index: number;
-}) {
-  const reveal = useRevealMotion(
-    { opacity: 0, y: 20 },
-    { opacity: 1, y: 0 },
-    {
-      transition: { duration: 0.45, delay: index * 0.05 },
-      viewport: { once: true },
-    },
-  );
-
-  return (
-    <motion.div
-      className="glow-border glass-card rounded-2xl p-4 sm:p-6"
-      {...reveal}
-    >
-      <h3 className="font-display mb-3 text-[10px] font-semibold tracking-widest text-accent-cyan uppercase sm:mb-4 sm:text-xs">
-        {group.category}
-      </h3>
-      <div className="flex flex-wrap gap-1.5 sm:gap-2">
-        {group.items.map((skill) => (
-          <TechLogo key={skill} name={skill} size={20} />
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
 export function Skills() {
   return (
     <section id="skills" className="section-padding">
@@ -113,8 +79,20 @@ export function Skills() {
         <LogoCloud />
 
         <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {skillGroups.map((group, index) => (
-            <SkillGroupCard key={group.category} group={group} index={index} />
+          {skillGroups.map((group) => (
+            <div
+              key={group.category}
+              className="glow-border glass-card rounded-2xl p-4 sm:p-6"
+            >
+              <h3 className="font-display mb-3 text-[10px] font-semibold tracking-widest text-accent-cyan uppercase sm:mb-4 sm:text-xs">
+                {group.category}
+              </h3>
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                {group.items.map((skill) => (
+                  <TechLogo key={skill} name={skill} size={20} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>

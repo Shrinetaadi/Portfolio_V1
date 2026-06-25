@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, type ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 const LOADER_LINES = [
   "Building products.",
@@ -73,29 +72,23 @@ export function PageLoader({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <AnimatePresence>
-        {introActive && (
-          <motion.div
-            key="intro-loader"
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-background px-6"
-            style={{ paddingTop: "env(safe-area-inset-top)" }}
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            aria-live="polite"
-            aria-busy="true"
-            role="status"
-          >
-            <p className="text-center text-lg text-foreground/90 sm:text-xl">
-              {displayed}
-              <span
-                className="ml-0.5 inline-block h-[1.05em] w-0.5 animate-pulse bg-foreground/75 align-[-0.08em]"
-                aria-hidden
-              />
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {introActive && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-background px-6"
+          style={{ paddingTop: "env(safe-area-inset-top)" }}
+          aria-live="polite"
+          aria-busy="true"
+          role="status"
+        >
+          <p className="text-center text-lg text-foreground/90 sm:text-xl">
+            {displayed}
+            <span
+              className="ml-0.5 inline-block h-[1.05em] w-0.5 animate-pulse bg-foreground/75 align-[-0.08em]"
+              aria-hidden
+            />
+          </p>
+        </div>
+      )}
 
       {children}
     </>
