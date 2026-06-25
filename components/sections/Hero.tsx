@@ -26,7 +26,7 @@ const item = {
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[100dvh] items-center overflow-hidden section-padding pt-20 sm:pt-24">
+    <section className="relative flex min-h-[100dvh] items-center overflow-hidden section-padding pt-[calc(4.75rem+env(safe-area-inset-top))] sm:pt-24">
       <div className="hidden sm:block">
         <HeroScene />
       </div>

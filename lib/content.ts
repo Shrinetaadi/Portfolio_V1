@@ -16,6 +16,8 @@ export const profile = {
   resumePath: "/resume.pdf",
   profileImage: "/profile.png",
   heroImage: "/hero-developer-bg.png",
+  /** Used for WhatsApp, LinkedIn, Twitter link previews — not the hero background */
+  ogImage: "/profile.png",
   siteUrl: "https://shrinetaadi.in",
 };
 

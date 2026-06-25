@@ -19,6 +19,7 @@ const syne = Syne({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: "#08080c",
 };
 
@@ -45,13 +46,13 @@ export const metadata: Metadata = {
     siteName: profile.name,
     title: `${profile.name} | ${profile.title}`,
     description: aboutBio.slice(0, 160),
-    images: [{ url: profile.heroImage, width: 1200, height: 800, alt: profile.name }],
+    images: [{ url: profile.ogImage, width: 1200, height: 1200, alt: profile.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${profile.name} | ${profile.title}`,
     description: aboutBio.slice(0, 160),
-    images: [profile.heroImage],
+    images: [profile.ogImage],
   },
   robots: { index: true, follow: true },
 };

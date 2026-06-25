@@ -10,10 +10,20 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  const showBar = scrolled || open;
 
   return (
     <>
@@ -22,11 +32,24 @@ export function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, delay: 0.15 }}
         className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
-          scrolled ? "glass-card border-b border-card-border py-3" : "py-6"
+          showBar
+            ? "glass-card border-b border-card-border shadow-[0_4px_24px_rgba(0,0,0,0.35)]"
+            : "bg-background/80 backdrop-blur-md lg:bg-transparent lg:backdrop-blur-none"
         }`}
+        style={{
+          paddingTop: "max(0.625rem, env(safe-area-inset-top))",
+        }}
       >
-        <div className="container-main flex max-w-6xl items-center justify-between">
-          <a href="#" className="font-display text-lg font-bold tracking-tight">
+        <div
+          className={`container-main flex max-w-6xl items-center justify-between px-4 sm:px-6 md:px-10 lg:px-16 ${
+            showBar ? "py-2.5 sm:py-3" : "py-3 sm:py-4 lg:py-6"
+          }`}
+        >
+          <a
+            href="#"
+            className="font-display text-lg font-bold tracking-tight sm:text-xl"
+            onClick={() => setOpen(false)}
+          >
             AS<span className="gradient-text">.</span>
           </a>
 
@@ -52,36 +75,61 @@ export function Navbar() {
 
           <button
             type="button"
-            className="text-foreground lg:hidden"
+            className="-mr-1 flex h-11 w-11 items-center justify-center rounded-xl text-foreground transition-colors hover:bg-card/60 lg:hidden"
             onClick={() => setOpen(!open)}
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
           >
-            {open ? <X size={24} /> : <Menu size={24} />}
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </motion.header>
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="glass-card fixed inset-x-4 top-20 z-40 rounded-2xl border border-card-border p-6 lg:hidden"
-          >
-            <nav className="flex flex-col gap-4">
-              {navLinks.map((link) => (
+          <>
+            <motion.button
+              type="button"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-background/70 backdrop-blur-sm lg:hidden"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="glass-card fixed inset-x-4 z-50 max-h-[min(70dvh,520px)] overflow-y-auto rounded-2xl border border-card-border p-5 shadow-[0_16px_48px_rgba(0,0,0,0.45)] sm:inset-x-6 lg:hidden"
+              style={{
+                top: "calc(3.75rem + env(safe-area-inset-top))",
+              }}
+            >
+              <nav className="flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-3 py-3 text-base text-muted transition-colors hover:bg-card/50 hover:text-foreground active:bg-card/60"
+                  >
+                    {link.label}
+                  </a>
+                ))}
                 <a
-                  key={link.href}
-                  href={link.href}
+                  href={profile.resumePath}
+                  download
                   onClick={() => setOpen(false)}
-                  className="text-lg text-muted transition-colors hover:text-foreground"
+                  className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-card-border px-4 py-3 text-sm font-medium transition-colors hover:border-accent-cyan/40 hover:text-accent-cyan"
                 >
-                  {link.label}
+                  <Download size={16} />
+                  Download Resume
                 </a>
-              ))}
-            </nav>
-          </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
